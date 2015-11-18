@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection Error : '));
-db.once('open', function(){
+db.once('open', function() {
   console.log('Connection ok!');
 });
 
@@ -41,14 +41,24 @@ router.route('/bears')
   bear.name = req.body.name;
 
   bear.save(function(err) {
-    if (err)
+    if (err) {
       res.send(err);
-
-    res.json({
-      message: "Bear created!"
-    });
+    } else {
+      res.json({
+        message: "Bear created!"
+      });
+    }
   });
+})
 
+.get(function(req, res) {
+  Bear.find(function(err, bears) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(bears);
+    };
+  });
 });
 
 app.use('/api', router);
