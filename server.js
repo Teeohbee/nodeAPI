@@ -61,6 +61,36 @@ router.route('/bears')
   });
 });
 
+router.route('/bears/:bear_id')
+
+.get(function(req, res) {
+  Bear.findById(req.params.bear_id, function(err, bear) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(bear);
+    };
+  });
+})
+
+.put(function(req, res) {
+  Bear.findById(req.params.bear_id, function(err, bear) {
+    if (err) {
+      res.send(err);
+    } else {
+      bear.name = req.body.name;
+    };
+
+    bear.save(function(err) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json({ message: "Bear updated!" });
+      };
+    });
+  });
+});
+
 app.use('/api', router);
 
 app.listen(port);
